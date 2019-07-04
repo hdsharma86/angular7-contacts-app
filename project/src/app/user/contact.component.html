@@ -1,0 +1,187 @@
+<navigation></navigation>
+<div class="container">
+<div class="card" style="margin-top:5%">
+<div class="card-body">
+<div class="row">
+    <div class="col-md-8">
+        <div class="card-columns">
+            <div title="Add New Contact" (click)="openModal('add-new')" class="card bg-light" style="cursor:pointer;height:88px;">
+              <div class="card-body text-center">
+                <p class="card-text">
+                    <span style="font-size:26px;"><i class="fa fa-user-plus"></i></span>
+                </p>
+              </div>
+            </div>
+
+            <div *ngFor="let contact of contacts" class="card bg-light" id="{{contact._id}}">
+              <div (click)="loadContactDeatil(contact._id)" class="card-body text-center" title="Load Contact Detail">
+                <a title="Remove Contact" class="user-icons remove-contact" (click)="deleteContact(contact._id)"><i class="fa fa-trash"></i></a>
+                <p class="card-text">Name: {{contact.firstname}} {{contact.lastname}}</p>
+                <p class="card-text">Phone: {{contact.phone}}</p>
+              </div>
+            </div>
+
+        </div>
+    </div>
+    <div *ngIf="isContactDetailEnabled" class="col-md-4">
+        <div class="card">
+            <a title="Update Contact" class="user-icons update-icon" (click)="updateContact(contactDetail._id)"><i class="fa fa-edit"></i></a>
+            <img style="width:100%;height:250px;" [src]="contactDetail.image-url" onError="this.src='https://www.w3schools.com/bootstrap4/img_avatar1.png'"/> 
+            <div class="card-body">
+                <h4 class="card-title">{{contactDetail.firstname}} {{contactDetail.lastname}}</h4>
+                <p class="card-text">{{contactDetail.phone}} | {{contactDetail.email}}</p>
+                <p class="card-text">{{contactDetail.about}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">{{modalTitle}}</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="row">
+              <div class="col-md-12">
+          <form class="form-horizontal"
+            novalidate
+            (ngSubmit)="save(formMode)"
+            [formGroup]="contactForm">  
+
+            <input id="contactId" type="hidden" value="" formControlName="contactId"/>
+
+            <!-- Firstname field code starts here -->
+            <div class="form-group" [ngClass]="{'has-error': (contactForm.get('firstName').touched ||
+                                                              contactForm.get('firstName').dirty) &&
+                                                              !contactForm.get('firstName').valid}">
+              <label class="col-md-2 control-label"
+                  for="fname">FirstName</label>
+              <div class="col-md-8">
+                  <input class="form-control"
+                      id="fname"
+                      type="text"
+                      placeholder="First Name"
+                      formControlName="firstName"/>
+                  <span class="help-block" *ngIf="(contactForm.get('firstName').touched ||
+                                                  contactForm.get('firstName').dirty) &&
+                                                  contactForm.get('firstName').errors">
+
+                      <span *ngIf="contactForm.get('firstName').errors.required">
+                        Please enter first Name
+                      </span>
+                      <span *ngIf="contactForm.get('firstName').errors.minlength">
+                          Min Length is 3
+                      </span>
+                  </span>
+              </div>
+            </div>
+            <!-- Firstname field code ends here -->
+
+            <!-- Lastname field code starts here -->
+            <div class="form-group" [ngClass]="{'has-error': (contactForm.get('lastName').touched ||
+                                                              contactForm.get('lastName').dirty) &&
+                                                              !contactForm.get('lastName').valid}">
+              <label class="col-md-2 control-label" for="lname">Last Name</label>
+              <div class="col-md-8">
+                  <input class="form-control"
+                      id="lname"
+                      type="text"
+                      placeholder="Last Name"
+                      formControlName="lastName"/>
+                  <span class="help-block" *ngIf="(contactForm.get('lastName').touched ||
+                                                  contactForm.get('lastName').dirty) &&
+                                                  contactForm.get('lastName').errors">
+
+                      <span *ngIf="contactForm.get('lastName').errors.required">
+                        Please enter first Name
+                      </span>
+                      <span *ngIf="contactForm.get('lastName').errors.minlength">
+                          Min Length should be at least 3
+                      </span>
+                  </span>
+              </div>
+            </div>
+            <!-- Lastname field code starts here -->
+
+            <!-- Email field code starts here -->
+            <div class="form-group">
+              <label class="col-md-2 control-label" for="email">Email Address</label>
+              <div class="col-md-8">
+                  <input class="form-control"
+                      id="email"
+                      type="text"
+                      placeholder="Email Address"
+                      formControlName="email"/>
+              </div>
+            </div>
+            <!-- Email field code starts here -->
+
+            <!-- Phone field code starts here -->
+            <div class="form-group">
+              <label class="col-md-2 control-label" for="phone">Phone</label>
+              <div class="col-md-8">
+                  <input class="form-control"
+                      id="phone"
+                      type="text"
+                      placeholder="+91 98765 28433"
+                      formControlName="phone"/>
+              </div>
+            </div>
+            <!-- Phone field code starts here -->
+
+            <!-- Image url field code starts here -->
+            <div class="form-group">
+              <label class="col-md-2 control-label" for="image-url">Image Url</label>
+              <div class="col-md-8">
+                  <input class="form-control"
+                      id="image-url"
+                      type="text"
+                      placeholder="Image Url"
+                      formControlName="imageUrl"/>
+              </div>
+            </div>
+            <!-- Image url field code starts here -->
+
+            <!-- About field code starts here -->
+            <div class="form-group">
+              <label class="col-md-2 control-label" for="about">About Me</label>
+              <div class="col-md-8">
+                  <input class="form-control"
+                      id="about"
+                      type="text"
+                      placeholder="About Me"
+                      formControlName="about"/>
+              </div>
+            </div>
+            <!-- Image url field code starts here -->
+              
+            <div class="form-group">
+              <div class="col-md-4 col-md-offset-2">
+                <span>
+                  <button class="btn btn-secondary"
+                        type="submit"
+                        [disabled]="!contactForm.valid">
+                      Submit
+                  </button>
+                </span>
+              </div>
+            </div>
+          </form>
+          </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loader-container"><div class="loader"></div></div>

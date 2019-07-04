@@ -1,0 +1,16 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <ul class="navbar-nav float-left">
+      <li class="nav-item active">
+        <a class="nav-link" href="#"><i class="fa fa-home"></i></a>
+      </li>
+      <li *ngIf="isUser" class="nav-item">
+        <a [routerLink]="['/contacts']" class="nav-link" href="#">My Contact(s)</a>
+      </li>
+      <li *ngIf="isAdmin" class="nav-item">
+        <a [routerLink]="['/manage-user']" class="nav-link" href="#">Manage User(s)</a>
+      </li>
+      <li class="nav-item">
+        <a style="cursor:pointer;" class="nav-link" (click)="logout()">Logout</a>
+      </li>
+    </ul>
+</nav>
